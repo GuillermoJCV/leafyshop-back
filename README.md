@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Es el backend de la tienda de [LeafyShop](https://github.com/GuillermoJCV/leafyshop-front), para manerjar tanto el auth como las peticiones a productos, países, categorías, clientes y empleados.
+Es el backend de la tienda de [LeafyShop](https://github.com/GuillermoJCV/leafyshop-front), para manejar tanto el auth como las peticiones a productos, países, categorías, clientes y empleados.
 
 ## Utilización
 
@@ -14,7 +14,7 @@ Para empezar a usar la api desde el front se debe descargar localmente:
   cd leafyshop-back
 ```
 
-Ahora necesitamos crear un archivo .env con la siguiente información : 
+Ahora necesitamos crear un archivo .env en la raíz del proyecto con la siguiente información: 
 ```env
 DATABASE_URL="file:./dev.db"
 ENCRYPT_TYPE="aes-256-cbc"
