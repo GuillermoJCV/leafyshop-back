@@ -2,13 +2,24 @@
 
 ## Utilización
 
-Para empezar a usar la api desde el front se debe descargar localmente
-y ejecutar los siguientes comandos:
+Para empezar a usar la api desde el front se debe descargar localmente:
 ```bash
   git clone https://github.com/GuillermoJCV/leafyshop-back.git
 ```
 ```bash
   cd leafyshop-back
+```
+
+Ahora necesitamos crear un archivo .env con la siguiente información : 
+```env
+DATABASE_URL="file:./dev.db"
+ENCRYPT_TYPE="aes-256-cbc"
+ENCRYPT_KEY="SECRET"
+ENCRYPT_SALT="SECRET"
+```
+
+```bash
+  npm install @prisma/client
 ```
 ```bash
   npm i && npm run start:seed
