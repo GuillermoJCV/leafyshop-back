@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// LOCATIONS
+
+model Country {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique 
+  currency      String
+  cities        City[]
+  customers     Customer[]
+  employees     Employee[]
+}
+
+model City {
+  id            Int         @id @default(autoincrement())
+  name          String
+  prefix        String    
+  country_id    Int?
+  districts     District[]
+  country       Country?    @relation(fields: [country_id], references: [id])
+}
+
+model District {
+  id            Int         @id @default(autoincrement())
+  name          String
+  city_id       Int?
+  city          City?       @relation(fields: [city_id], references: [id])
+}
+
+// LOCATIONS
+
+// ROLES
+
+model Role {
+  id            Int         @id @default(autoincrement())
+  name          String
+  users         User[]
+}
+
+// ROLES
+
+// USERS
+
+model User {
+  id            Int         @id @default(autoincrement())
+  username      String      @unique
+  password      String
+  status        Boolean     @default(true)
+  email         String      @unique
+  role_id       Int?        
+  customer      Customer?
+  employee      Employee?
+  role          Role?       @relation(fields: [role_id], references: [id])
+}
+
+model Customer {
+  customer_id   Int         @id
+  name          String
+  alt_email     String      @unique
+  phone         String      @unique
+  alt_phone     String?     
+  direcction    String      
+  alt_direction String?     
+  tb_code       String      
+  tb_code_type  String     
+  seller_id     Int?       
+  country_id    Int
+  user          User        @relation(fields: [customer_id], references: [id])
+  seller        Employee?   @relation(fields: [seller_id], references: [employee_id])
+  country       Country     @relation(fields: [country_id], references: [id])
+}
+
+model Employee {
+  employee_id   Int         @id
+  name          String
+  birth_date    DateTime
+  customers     Customer[]
+  country_id    Int
+  inventory_id  Int
+  user          User        @relation(fields: [employee_id], references: [id])
+  country       Country     @relation(fields: [country_id], references: [id])
+  inventory     Inventory   @relation(fields: [inventory_id], references: [id])
+}
+
+// USERS
+
+// ORDERS
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  description   String      
+  total_price   Decimal
+  delivery_date DateTime
+  isOrdered     Boolean
+  isProduction  Boolean
+  isTraveling   Boolean
+  shippingDate  DateTime
+  discount      Float
+  iva           Float
+  orderDetails  OrderDetails[]
+}
+
+model OrderDetails {
+  id            Int         @id @default(autoincrement())
+  item_name     String      
+  description   String
+  unit_price    Float
+  unit_measure  String
+  quantity      Int
+  total_price   Float
+  product_id    Int
+  order_id      Int
+  order         Order       @relation(fields: [order_id], references: [id])
+  product       Product     @relation(fields: [product_id, item_name], references: [id, name])
+}
+
+// ORDERS
+
+// INVENTORY
+
+model Inventory {
+  id            Int         @id @default(autoincrement())
+  providers     Employee[]
+  products      Product[]
+}
+
+// INVENTORY
+
+// PRODUCTS
+
+model Product {
+  id            Int         @id @default(autoincrement())
+  name          String
+  unit_price    Float
+  unit_measure  String
+  description   String?
+  shipping_cost Float
+  image_urls    ImgUrl[]
+  score         Int
+  iva           Float
+  discount      Float
+  stock         Int         @default(0)
+  orders        OrderDetails[]
+  category_id   Int
+  inventory_id  Int
+  category      Category    @relation(fields: [category_id], references: [id])
+  inventory     Inventory   @relation(fields: [inventory_id], references: [id])
+  @@unique([id, name])
+}
+
+model ImgUrl {
+  id            Int         @id @default(autoincrement())
+  url           String
+  product_id    Int
+  product       Product     @relation(fields: [product_id], references: [id])
+}
+
+// PRODUCTS
+
+// CATEGORIES
+
+model Category {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  products      Product[]
+  subCategories SubCategory[]
+}
+
+model SubCategory {
+  id            Int         @id @default(autoincrement())
+  name          String    
+  category_id   Int
+  category      Category    @relation(fields: [category_id], references: [id])
+}
+
+// CATEGORIES

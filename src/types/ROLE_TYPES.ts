@@ -1,0 +1,6 @@
+export enum ROLE_TYPES {
+	NONE = 0,
+	ADMIN,
+	CUSTOMER,
+	SELLER
+}
