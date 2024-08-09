@@ -18,6 +18,7 @@ ENCRYPT_KEY="SECRET"
 ENCRYPT_SALT="SECRET"
 ```
 
+Y ejecutar los siguientes comandos:
 ```bash
   npm install @prisma/client
 ```
