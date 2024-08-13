@@ -4,8 +4,9 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
-
-const isProducction = process.env.PRODUCCTION || false
+import { CountriesService } from './countries/countries.service';
+import { CountriesModule } from './countries/countries.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Global()
 @Module({
@@ -13,12 +14,14 @@ const isProducction = process.env.PRODUCCTION || false
   [
     UsersModule,
     ConfigModule.forRoot({
-      envFilePath : isProducction ? ".env" : ".env.local",
+      envFilePath : ".env",
       isGlobal: true,
     }),
+    CountriesModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, CountriesService],
   exports : [PrismaService]
 })
 export class AppModule {}

@@ -22,16 +22,16 @@ model City {
   id            Int         @id @default(autoincrement())
   name          String
   prefix        String    
-  country_id    Int?
+  country_id    Int
   districts     District[]
-  country       Country?    @relation(fields: [country_id], references: [id])
+  country       Country    @relation(fields: [country_id], references: [id], onDelete: Cascade)
 }
 
 model District {
   id            Int         @id @default(autoincrement())
   name          String
-  city_id       Int?
-  city          City?       @relation(fields: [city_id], references: [id])
+  city_id       Int
+  city          City       @relation(fields: [city_id], references: [id], onDelete: Cascade)
 }
 
 // LOCATIONS
@@ -57,36 +57,36 @@ model User {
   role_id       Int?        
   customer      Customer?
   employee      Employee?
-  role          Role?       @relation(fields: [role_id], references: [id])
+  role          Role?       @relation(fields: [role_id], references: [id], onDelete: NoAction)
 }
 
 model Customer {
-  customer_id   Int         @id
+  customer_id   Int          @id
   name          String
-  alt_email     String      @unique
-  phone         String      @unique
+  alt_email     String       @unique
+  phone         String       @unique
   alt_phone     String?     
   direcction    String      
   alt_direction String?     
   tb_code       String      
   tb_code_type  String     
   seller_id     Int?       
-  country_id    Int
-  user          User        @relation(fields: [customer_id], references: [id])
-  seller        Employee?   @relation(fields: [seller_id], references: [employee_id])
-  country       Country     @relation(fields: [country_id], references: [id])
+  country_id    Int?
+  user          User         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  seller        Employee?    @relation(fields: [seller_id], references: [employee_id], onDelete: SetNull)
+  country       Country?     @relation(fields: [country_id], references: [id], onDelete: SetNull)
 }
 
 model Employee {
-  employee_id   Int         @id
+  employee_id   Int          @id
   name          String
   birth_date    DateTime
   customers     Customer[]
-  country_id    Int
-  inventory_id  Int
-  user          User        @relation(fields: [employee_id], references: [id])
-  country       Country     @relation(fields: [country_id], references: [id])
-  inventory     Inventory   @relation(fields: [inventory_id], references: [id])
+  country_id    Int?
+  inventory_id  Int?
+  user          User         @relation(fields: [employee_id], references: [id], onDelete: Cascade)
+  country       Country?     @relation(fields: [country_id], references: [id], onDelete: SetNull)
+  inventory     Inventory?   @relation(fields: [inventory_id], references: [id], onDelete: SetNull)
 }
 
 // USERS
@@ -117,8 +117,8 @@ model OrderDetails {
   total_price   Float
   product_id    Int
   order_id      Int
-  order         Order       @relation(fields: [order_id], references: [id])
-  product       Product     @relation(fields: [product_id, item_name], references: [id, name])
+  order         Order       @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product       Product     @relation(fields: [product_id, item_name], references: [id, name], onDelete: Cascade)
 }
 
 // ORDERS
@@ -148,10 +148,10 @@ model Product {
   discount      Float
   stock         Int         @default(0)
   orders        OrderDetails[]
-  category_id   Int
+  category_id   Int?
   inventory_id  Int
-  category      Category    @relation(fields: [category_id], references: [id])
-  inventory     Inventory   @relation(fields: [inventory_id], references: [id])
+  category      Category?    @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  inventory     Inventory   @relation(fields: [inventory_id], references: [id], onDelete: Cascade)
   @@unique([id, name])
 }
 
@@ -159,7 +159,7 @@ model ImgUrl {
   id            Int         @id @default(autoincrement())
   url           String
   product_id    Int
-  product       Product     @relation(fields: [product_id], references: [id])
+  product       Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 // PRODUCTS
@@ -177,7 +177,7 @@ model SubCategory {
   id            Int         @id @default(autoincrement())
   name          String    
   category_id   Int
-  category      Category    @relation(fields: [category_id], references: [id])
+  category      Category    @relation(fields: [category_id], references: [id], onDelete: Cascade)
 }
 
 // CATEGORIES
