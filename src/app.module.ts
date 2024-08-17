@@ -1,27 +1,32 @@
 import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
-import { UsersModule } from './users/users.module';
 import { CountriesService } from './countries/countries.service';
 import { CountriesModule } from './countries/countries.module';
 import { CategoriesModule } from './categories/categories.module';
+import { AuthModule } from './users/auth/auth.module';
+
+const RootConfigModule = ConfigModule.forRoot({
+  envFilePath : ".env",
+  isGlobal: true,
+})
 
 @Global()
 @Module({
   imports:
   [
-    UsersModule,
-    ConfigModule.forRoot({
-      envFilePath : ".env",
-      isGlobal: true,
-    }),
+    RootConfigModule,
+    AuthModule,
     CountriesModule,
     CategoriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, CountriesService],
-  exports : [PrismaService]
+  providers: [PrismaService, CountriesService],
+  exports : [
+    PrismaService,
+    RootConfigModule,
+    AuthModule
+  ]
 })
 export class AppModule {}

@@ -8,7 +8,7 @@
   "scripts": {
     "start:seed": "node src/seed.mjs",
     "build": "npm run start:seed && nest build",
-    "start": "npm run start:seed && nest start",
+    "start": "nest start",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "prod": "node dist/main",
