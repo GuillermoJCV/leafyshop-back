@@ -136,22 +136,22 @@ model Inventory {
 // PRODUCTS
 
 model Product {
-  id            Int         @id @default(autoincrement())
-  name          String
-  unit_price    Float
-  unit_measure  String
-  description   String?
-  shipping_cost Float
-  image_urls    ImgUrl[]
-  score         Int
-  iva           Float
-  discount      Float
-  stock         Int         @default(0)
-  orders        OrderDetails[]
-  category_id   Int?
-  inventory_id  Int
-  category      Category?    @relation(fields: [category_id], references: [id], onDelete: SetNull)
-  inventory     Inventory   @relation(fields: [inventory_id], references: [id], onDelete: Cascade)
+  id              Int         @id @default(autoincrement())
+  name            String
+  unit_price      Float
+  unit_measure    String
+  description     String?
+  shipping_cost   Float
+  image_urls      ImgUrl[]
+  score           Int
+  iva             Float
+  discount        Float
+  stock           Int         @default(0)
+  orders          OrderDetails[]
+  subcategory_id  Int?
+  inventory_id    Int
+  subcategory     SubCategory?    @relation(fields: [subcategory_id], references: [id], onDelete: SetNull)
+  inventory       Inventory      @relation(fields: [inventory_id], references: [id], onDelete: Cascade)
   @@unique([id, name])
 }
 
@@ -169,7 +169,6 @@ model ImgUrl {
 model Category {
   id            Int         @id @default(autoincrement())
   name          String      @unique
-  products      Product[]
   subCategories SubCategory[]
 }
 
@@ -177,6 +176,7 @@ model SubCategory {
   id            Int         @id @default(autoincrement())
   name          String    
   category_id   Int
+  products      Product[]
   category      Category    @relation(fields: [category_id], references: [id], onDelete: Cascade)
 }
 

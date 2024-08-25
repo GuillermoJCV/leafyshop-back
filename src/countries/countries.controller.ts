@@ -31,7 +31,7 @@ export class CountriesController {
 	@Get()
 	async getCountries
 	(
-		@Query("page", new DefaultValuePipe(1), new ParseIntPipe({ optional : true})) page : number
+		@Query("page", new DefaultValuePipe(1), new ParseIntPipe({ optional : true })) page : number
 	) : Promise<Country[]>
 	{
 		return await this.countriesService.findCountries({ page })

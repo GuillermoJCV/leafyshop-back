@@ -1,37 +1,42 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, DefaultValuePipe, ParseIntPipe, UsePipes } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { ApiExcludeController, ApiTags } from '@nestjs/swagger';
+import { CreateCategoryDto, CreateCategoryScheme } from './dto/create-category.dto';
+import { UpdateCategoryDto, UpdateCategoryScheme } from './dto/update-category.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { ZodValidationPipe } from 'src/pipes/ZodValidationPipe';
 
-@ApiExcludeController()
 @ApiTags("Categories")
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
+  @UsePipes(new ZodValidationPipe(CreateCategoryScheme))
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(
+    @Query("page", new DefaultValuePipe(1), new ParseIntPipe({ optional : true })) page : number
+  )
+  {
+    return this.categoriesService.findAll({ page });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+  @Put(':id')
+  @UsePipes(new ZodValidationPipe(UpdateCategoryScheme))
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateCategoryDto: UpdateCategoryDto) {
+    return this.categoriesService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.remove(id);
   }
 }
