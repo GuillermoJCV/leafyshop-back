@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UsePipes, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
 import { SubcategoriesService } from './subcategories.service';
 import { CreateSubcategoryDto, CreateSubcategoryScheme } from './dto/create-subcategory.dto';
 import { UpdateSubcategoryDto, UpdateSubcategoryScheme } from './dto/update-subcategory.dto';
@@ -32,7 +32,7 @@ export class SubcategoriesController {
     return this.subcategoriesService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiBody({ type : UpdateSubcategoryDto })
   @UsePipes(new ZodValidationPipe(UpdateSubcategoryScheme))
   update(
