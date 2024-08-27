@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import { decrypt, encrypt } from "./encryptation.mjs"
+import { encrypt } from "./encryptation.mjs"
 
 const prisma = new PrismaClient();
 const isProduction = Boolean(process.env.PRODUCTION)
@@ -41,31 +41,17 @@ async function main() {
 		await prisma.city.create({ data : { name : "Santo Domingo", prefix : "+1 (809)", country_id : 5 } })
 	}
 
-	await prisma.user.deleteMany()
-	if(!isProduction) {
-		console.log("Creating users")
-		const adminUser = await prisma.user.create({ 
-			data : {
-				id : 1,
-				username : "admin",
-				password : encrypt("admin"),
-				email : "admin@leafyshop.com",
-				role_id : 1
-			}
-		})
-		await prisma.user.create({ 
-			data : {
-				id : 2,
-				username : "customer",
-				password : encrypt("customer"),
-				email : "customer@leafyshop.com",
-				role_id : 2
-			}
-		})
-
-		console.log(adminUser.password)
-		console.log(decrypt(adminUser.password))
-	}
+	await prisma.user.deleteMany({ where : { username : "admin" }})
+	console.log("Creating users")
+	await prisma.user.create({ 
+		data : {
+			id : 1,
+			username : "admin",
+			password : encrypt(process.env.ADMIN_PASSWORD || "admin"),
+			email : "admin@leafyshop.com",
+			role_id : 1
+		}
+	})
 }
 
 main()
