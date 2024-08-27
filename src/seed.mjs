@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client"
 import { encrypt } from "./encryptation.mjs"
 
 const prisma = new PrismaClient();
-const isProduction = Boolean(process.env.PRODUCTION)
 
 async function main() {
 	await prisma.$connect()

@@ -17,7 +17,7 @@ export class SubcategoriesService {
     page : number;
     cursor? : Prisma.SubCategoryWhereUniqueInput;
     where? : Prisma.SubCategoryWhereInput;
-    orderB? : Prisma.SubCategoryOrderByWithRelationInput;
+    orderBy? : Prisma.SubCategoryOrderByWithRelationInput;
   }) : Promise<SubCategory[]>
   {
     const { page, cursor, where, orderBy } = params
