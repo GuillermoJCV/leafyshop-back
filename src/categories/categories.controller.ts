@@ -18,21 +18,21 @@ export class CategoriesController {
   @ApiHeader({ name : "Authorization" })
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(CreateCategoryScheme))
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
+  async create(@Body() createCategoryDto: CreateCategoryDto) {
+    return await this.categoriesService.create(createCategoryDto);
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Query("page", new DefaultValuePipe(1), new ParseIntPipe({ optional : true })) page : number
   )
   {
-    return this.categoriesService.findAll({ page });
+    return await this.categoriesService.findAll({ page });
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.categoriesService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.categoriesService.findOne(id);
   }
 
   @Put(':id')
@@ -40,12 +40,14 @@ export class CategoriesController {
   @ApiHeader({ name : "Authorization" })
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(UpdateCategoryScheme))
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(id, updateCategoryDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateCategoryDto: UpdateCategoryDto)
+  {
+    return await this.categoriesService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.categoriesService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number)
+  {
+    return await this.categoriesService.remove(id);
   }
 }

@@ -8,7 +8,9 @@ export class CategoriesService {
 
   async create(data: Prisma.CategoryCreateInput) : Promise<Category>
   {
-    return this.prisma.category.create({ data });
+    const response = this.prisma.category.create({ data });
+    if(response) return response
+    else throw new HttpException("No se ha podido crear la categoría por un error interno", HttpStatus.NOT_IMPLEMENTED)
   }
 
   async findAll(params : {
@@ -27,18 +29,24 @@ export class CategoriesService {
     else throw new HttpException("La página tiene que ser mayor a 0", HttpStatus.BAD_REQUEST)
   }
 
-  async findOne(id: number)
+  async findOne(id: number) : Promise<Category>
   {
-    return await this.prisma.category.findUnique({ where : { id } });
+    const response = await this.prisma.category.findUnique({ where : { id } });
+    if(response) return response
+    else throw new HttpException("La categoría buscada, no existe", HttpStatus.NOT_FOUND)
   }
 
   async update(id: number, data: Prisma.CategoryUpdateInput)
   {
-    return await this.prisma.category.update({ where : { id }, data });
+    const response = await this.prisma.category.update({ where : { id }, data });
+    if(response) return response
+    else throw new HttpException("La categoría buscada, no existe", HttpStatus.NOT_FOUND)
   }
 
   async remove(id: number)
   {
-    return this.prisma.category.delete({ where : { id } });
+    const response = this.prisma.category.delete({ where : { id } });
+    if(response) return response
+    else throw new HttpException("La categoría buscada, no existe", HttpStatus.NOT_FOUND)
   }
 }
