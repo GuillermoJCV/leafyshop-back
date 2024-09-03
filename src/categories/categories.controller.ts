@@ -30,9 +30,12 @@ export class CategoriesController {
     return await this.categoriesService.findAll({ page });
   }
 
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.categoriesService.findOne(id);
+  @Get(':param')
+  async findOne(@Param('param') param: string) {
+
+    if(+param) return await this.categoriesService.findById(Number.parseInt(param));
+    else return await this.categoriesService.findByName(param)
+    
   }
 
   @Put(':id')

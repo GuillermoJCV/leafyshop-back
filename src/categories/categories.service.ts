@@ -29,9 +29,16 @@ export class CategoriesService {
     else throw new HttpException("La página tiene que ser mayor a 0", HttpStatus.BAD_REQUEST)
   }
 
-  async findOne(id: number) : Promise<Category>
+  async findById(id: number) : Promise<Category>
   {
     const response = await this.prisma.category.findUnique({ where : { id } });
+    if(response) return response
+    else throw new HttpException("La categoría buscada, no existe", HttpStatus.NOT_FOUND)
+  }
+
+  async findByName(name: string) : Promise<Category>
+  {
+    const response = await this.prisma.category.findUnique({ where : { name } });
     if(response) return response
     else throw new HttpException("La categoría buscada, no existe", HttpStatus.NOT_FOUND)
   }
