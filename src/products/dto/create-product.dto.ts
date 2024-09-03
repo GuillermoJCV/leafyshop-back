@@ -1,11 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Prisma } from "@prisma/client";
 import { z } from "zod";
-
-class ImageUrlDto {
-    @ApiProperty()
-    url: string;
-}
+import { ApiProperty } from "@nestjs/swagger";
+import { ImageUrlDto, ImageUrlSchema } from "./image-url.dto";
 
 export class CreateProductDto {
 
@@ -48,10 +43,6 @@ export class CreateProductDto {
     //orders?: Prisma.OrderDetailsUncheckedCreateNestedManyWithoutProductInput;
 
 }
-
-const ImageUrlSchema = z.object({
-    url : z.string().url("La imagen debe ser una url")
-})
 
 export const CreateProductSchema = z.object({
     name : z.string(),
