@@ -4,7 +4,9 @@
 /build
 
 # src directory
+src/metadata.ts
 
+# prisma directory
 
 # Logs
 logs
